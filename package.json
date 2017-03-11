@@ -1,0 +1,35 @@
+{
+  "name": "univraule-bot",
+  "version": "1.0.0",
+  "description": "A simple Bot that shows rooms availability at University of Verona",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "eslint": "^3.17.1",
+    "express": "^4.15.2",
+    "request": "^2.81.0",
+    "winston": "^2.3.1",
+    "winston-papertrail": "^1.0.4"
+  },
+  "devDependencies": {
+    "concurrently": "^3.4.0",
+    "cross-env": "^3.2.3",
+    "net": "^1.0.2",
+    "ssh2": "^0.5.4"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "dev": "cross-env NODE_ENV=development concurrently --kill-others \"node index.js\" \"node ssh/index.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/francescotonini/univraule-bot.git"
+  },
+  "author": "Francesco Tonini <francescoantoniotonini@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/francescotonini/univraule-bot/issues"
+  },
+  "homepage": "https://github.com/francescotonini/univraule-bot#readme"
+}
