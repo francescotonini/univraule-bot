@@ -7,6 +7,7 @@
     "body-parser": "^1.17.1",
     "eslint": "^3.17.1",
     "express": "^4.15.2",
+    "handlebars": "^4.0.6",
     "node-wit": "^4.2.0",
     "request": "^2.81.0",
     "winston": "^2.3.1",
@@ -20,7 +21,7 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "dev": "cross-env NODE_ENV=development concurrently --kill-others \"node index.js\" \"node ssh/index.js\"",
+    "dev": "cross-env NODE_ENV=development concurrently --kill-others \"node --inspect index.js\" \"node ssh/index.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

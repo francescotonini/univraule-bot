@@ -1,0 +1,17 @@
+{
+	"start": "Benvenuto! ☺️",
+	"help": "Puoi farmi domande sulla disponibilità delle aule di Cà Vignal 1 e Cà Vignal 2. 😄\nProva con domande come \"Quando è libera Tessari?\", \"Quali aule sono libere adesso?\"\n\nPer problemi e curiosità scrivi a @francescotonini.\nBuon divertimento! 😘",
+	"unknown_error": "Ops! Qualcosa non è andato per il verso giusto 😭",
+	"no_intent": "Non ho capito 😭",
+	"room_not_found": "Non ho trovato l'aula 😭",
+	"room_free": "✅ L'aula è libera fino alle {{humanHour end}}",
+	"room_busy": "❗️ L'aula è occupata fino alle {{humanHour end}}",
+	"room_closed": "L'aula è chiusa 😭",
+	"rooms_list": "Le aule <b>{{status}}</b> sono:\n{{#each rooms}}<b>{{name}}</b> fino alle {{humanHour end}}\n{{/each}}",
+	"room_list": "L'aula è {{status}} nelle seguenti fasce orarie:\n{{#each list}}Dalle {{humanHour start}} fino alle {{humanHour end}}\n{{/each}}",
+	"all_rooms_free": "✅ Tutte le aule sono <b>libere</b>",
+	"all_rooms_busy": "❗️ Tutte le aule sono <b>occupate</b>",
+	"all_rooms_closed": "😭 Tutte le aule sono <b>chiuse</b>",
+	"room_always_free": "<b>{{name}}</b> è libera per tutto il giorno! 😆",
+	"room_always_busy": "<b>{{name}}</b> è occupata per tutto il giorno! 😡"
+}
