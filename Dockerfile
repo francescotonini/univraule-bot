@@ -1,15 +1,18 @@
-FROM node:6.10.1-alpine
+FROM node:8.11.1-alpine
+MAINTAINER Francesco Tonini <francescoantoniotonini@gmail.com>
+ENV REFRESHED_AT 2018-04-15
 
-# Copy source code and install modules
-COPY package.json /src/package.json
-RUN cd /src; npm install
+COPY . src/
+RUN echo "Move to /src and install app dependencies"  \
+	&& cd /src \
+	&& npm install --production \
+	&& echo "Done :)"
 
-# Copy app bundle
-COPY ./lib /src/lib
-COPY ./index.js /src
-
-# Expost api port
+# Expose ports to host
 EXPOSE 5000
 
-# Here we go
+# Se envs
+ENV NODE_ENV=production
+
+# Start
 CMD ["node", "/src/index.js"]

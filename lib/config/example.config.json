@@ -1,0 +1,10 @@
+{
+	"telegram": {
+		"token": "",
+		"serverPort": 0
+	},
+	"api": {
+		"baseUrl": "",
+		"officeIds": [ 1, 2, 3 ]
+	}
+}

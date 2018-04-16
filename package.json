@@ -1,37 +1,30 @@
 {
-  "name": "univraule-bot",
-  "version": "1.0.0",
-  "description": "A simple Bot that shows rooms availability at University of Verona",
+  "name": "univraulebot",
+  "version": "2.0.0",
+  "description": "UniVR Aule Bot",
+  "private": true,
   "main": "index.js",
-  "dependencies": {
-    "body-parser": "^1.17.1",
-    "eslint": "^3.17.1",
-    "express": "^4.15.2",
-    "handlebars": "^4.0.6",
-    "node-wit": "^4.2.0",
-    "request": "^2.81.0",
-    "winston": "^2.3.1",
-    "winston-papertrail": "^1.0.4"
-  },
-  "devDependencies": {
-    "concurrently": "^3.4.0",
-    "cross-env": "^3.2.3",
-    "net": "^1.0.2",
-    "ssh2": "^0.5.4"
-  },
   "scripts": {
-    "lint": "eslint .",
-    "dev": "cross-env NODE_ENV=development concurrently --kill-others \"node --inspect index.js\" \"node ssh/index.js\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint lib",
+    "start": "node --inspect index.js | bistre"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/francescotonini/univraule-bot.git"
   },
   "author": "Francesco Tonini <francescoantoniotonini@gmail.com>",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/francescotonini/univraule-bot/issues"
+  "license": "MIT",
+  "dependencies": {
+    "async": "^2.6.0",
+    "bole": "^3.0.1",
+    "handlebars": "^4.0.6",
+    "moment-timezone": "^0.5.9",
+    "node-emoji": "^1.8.1",
+    "raw-body": "^2.1.7",
+    "request": "^2.78.0"
   },
-  "homepage": "https://github.com/francescotonini/univraule-bot#readme"
+  "devDependencies": {
+    "bistre": "^1.0.1",
+    "eslint": "^3.10.0"
+  }
 }
