@@ -3,7 +3,7 @@
 	"help": "/aule :point_right: visualizza lo stato delle aule\n/aulelibere :point_right: visualizza lo stato delle aule libere",
 	"dunno": ":confused: Non ho capito... Premi /aiuto per visualizzare i comandi disponibili",
 	"error": "Qualcosa è andato storto! Riprova più tardi :sob:",
-	"free_rooms": "Le aule *libere* al momento sono:{{#each rooms}}\n:point_right: *{{name}}* fino alle *{{unixToPrettyTime until}}*{{/each}}",
-	"rooms": "Stato attuale delle aule:{{#each rooms}}\n{{isFreeToEmoji isFree}} *{{name}}* fino alle *{{unixToPrettyTime until}}*{{/each}}",
-	"no_rooms": "Nessuna aula libera al momento :P!"
+	"free_rooms": "Le aule *libere* al momento sono:{{#each rooms}}\n:point_right: *{{name}}* fino alle *{{unixToPrettyTime until}}*{{/each}}\n\nHai un telefono Android? Scarica subito l'app di [UniVR Aule](https://play.google.com/store/apps/details?id=it.francescotonini.univraule)!",
+	"rooms": "Stato attuale delle aule:{{#each rooms}}\n{{isFreeToEmoji isFree}} *{{name}}* fino alle *{{unixToPrettyTime until}}*{{/each}}\n\nHai un telefono Android? Scarica subito l'app di [UniVR Aule](https://play.google.com/store/apps/details?id=it.francescotonini.univraule)!",
+	"no_rooms": "Nessuna aula libera al momento!"
 }
