@@ -1,6 +1,6 @@
 {
   "name": "univraulebot",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "UniVR Aule Bot",
   "private": true,
   "main": "index.js",
