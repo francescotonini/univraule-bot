@@ -1,6 +1,6 @@
 {
   "name": "univraulebot",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "description": "UniVR Aule Bot",
   "private": true,
   "main": "index.js",
@@ -16,12 +16,14 @@
   "license": "MIT",
   "dependencies": {
     "@timberio/node": "^0.33.0",
+    "@timberio/winston": "^0.33.0",
     "async": "^2.6.0",
     "handlebars": "^4.0.6",
     "moment-timezone": "^0.5.9",
     "node-emoji": "^1.8.1",
     "raw-body": "^2.1.7",
-    "request": "^2.78.0"
+    "request": "^2.78.0",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "eslint": "^3.10.0"
