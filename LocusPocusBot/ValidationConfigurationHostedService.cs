@@ -7,11 +7,9 @@ namespace LocusPocusBot
 {
     class SettingsValidationHostedService : IHostedService
     {
-        public SettingsValidationHostedService(IOptions<BotConfiguration> bot,
-                                               IOptions<DatabaseConfiguration> db)
+        public SettingsValidationHostedService(IOptions<BotConfiguration> bot)
         {
             bot.Value.Validate();
-            db.Value.Validate();
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
