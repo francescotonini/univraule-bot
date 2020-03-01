@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace LocusPocusBot.Rooms
 {
     public class RoomsService : IRoomsService
     {
-        private readonly string easyRoomUrl = "https://easyacademy.unitn.it/AgendaStudentiUnitn/rooms_call.php";
+        private readonly string easyRoomUrl = "https://logistica.univr.it/PortaleStudentiUnivr//rooms_call.php";
         private readonly HttpClient client;
 
         public RoomsService(HttpClient client)
@@ -36,44 +37,67 @@ namespace LocusPocusBot.Rooms
                 department.UpdatedAt = dateString;
             }
 
-            // Prepare the request payload
-            var form = new Dictionary<string, string>
+            List<List<Room>> nestedRooms = new List<List<Room>>();
+            foreach (int id in department.Ids)
             {
-                { "form-type", "rooms" },
-                { "sede", department.Id },
-                { "date", dateString },
-                { "_lang", "it" }
-            };
+                // Prepare the request payload
+                var form = new Dictionary<string, string>
+                {
+                    { "form-type", "rooms" },
+                    { "sede", id.ToString() },
+                    { "date", dateString },
+                    { "_lang", "it" }
+                };
 
-            // Post x-www-form-urlencoded data
-            HttpResponseMessage response =
-                await this.client.PostAsync(this.easyRoomUrl, new FormUrlEncodedContent(form));
+                // Post x-www-form-urlencoded data
+                HttpResponseMessage response =
+                    await this.client.PostAsync(this.easyRoomUrl, new FormUrlEncodedContent(form));
 
-            // Read the response body
-            string body = await response.Content.ReadAsStringAsync();
+                // Read the response body
+                string body = await response.Content.ReadAsStringAsync();
 
-            // Parse the JSON object
-            JObject payload = JObject.Parse(body);
+                // Parse the JSON object
+                JObject payload = JObject.Parse(body);
 
-            List<Room> rooms = ParseRooms(payload, department);
-            ParseLectures(payload, rooms);
+                // Get the dictionary of rooms for the department.
+                // This API is so weird. You ask information for a department,
+                // and it returns all the departments anyway
+                JObject roomDic = (JObject)payload.SelectToken($"area_rooms.{id}");
 
-            return rooms;
+                List<Room> rooms = ParseRooms(roomDic, department);
+                ParseLectures(payload, rooms);
+
+                nestedRooms.Add(rooms);
+            }
+
+            return nestedRooms.SelectMany(x => x).ToList();
         }
 
-        private static List<Room> ParseRooms(JObject payload, Department department)
+        private static List<Room> ParseRooms(JObject roomDic, Department department)
         {
-            // Get the dictionary of rooms for the department.
-            // This API is so weird. You ask information for a department,
-            // and it returns all the departments anyway
-            JObject roomsDic = (JObject)payload.SelectToken($"area_rooms.{department.Id}");
-
             // Create a list for rooms
             List<Room> rooms = new List<Room>();
 
-            foreach (KeyValuePair<string, JToken> item in roomsDic)
+            foreach (KeyValuePair<string, JToken> item in roomDic)
             {
                 string roomName = item.Value["room_name"].ToString();
+
+                if (department.Slug == "cavignal")
+                {
+                    if (roomName.ToLower().StartsWith("sala riunioni"))
+                    {
+                        continue;
+                    }
+                    else if (roomName.ToLower().StartsWith("ufficio docenti"))
+                    {
+                        continue;
+                    }
+                    else if (roomName.ToLower().StartsWith("sala verde"))
+                    {
+                        continue;
+                    }
+                }
+
 
                 if (department.Slug == "povo")
                 {

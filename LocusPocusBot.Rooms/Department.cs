@@ -1,4 +1,5 @@
 ﻿using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,9 +8,11 @@ namespace LocusPocusBot.Rooms
     public class Department
     {
         /// <summary>
-        /// EasyRoom ID of the department
+        /// EasyRoom IDs of the department
+        /// 
+        /// (EasyRoom splits the same department into multiple buildings)
         /// </summary>
-        public string Id { get; }
+        public int[] Ids { get; set; }
 
         /// <summary>
         /// Name of the department
@@ -31,11 +34,11 @@ namespace LocusPocusBot.Rooms
         /// </summary>
         public string UpdatedAt { get; set; }
 
-        public Department(string id, string name, string slug)
+        public Department(string name, string slug, params int[] ids)
         {
-            this.Id = id;
             this.Name = name;
             this.Slug = slug;
+            this.Ids = ids;
         }
 
         public AvailabilityGroup[] FindFreeRoomsAt(Instant instant)

@@ -81,12 +81,19 @@ namespace LocusPocusBot
 
             services.AddSingleton(new Department[]
             {
-                new Department("E0503", "Povo", "povo"),
-                new Department("E0301", "Mesiano", "mesiano"),
-                new Department("E0601", "Sociologia", "sociologia"),
-                new Department("E0801", "Lettere", "lettere"),
-                new Department("E0101", "Economia", "economia"),
-                new Department("E0705", "Psicologia", "psicologia"),
+                new Department("Ca' Vignal", "cavignal", 1, 2, 3),
+                // new Department("Bolzano - Claudiana", "claudiana", 68, 69),
+                new Department("Istituti biologici", "biologici", 22, 23),
+                new Department("Medicina - Borgo Roma", "borgoroma", 27, 24, 29, 30, 40, 26),
+                new Department("Medicina - Borgo Trento", "borgotrento", 31),
+                new Department("Borgo Venezia", "borgovenezia", 33, 43),
+                new Department("Cittadella", "cittadella", 17, 54),
+                // new Department("Legnago", "legnago", 70, 71),
+                // new Department("Rovereto", "rovereto", 61),
+                new Department("S. Floriano", "floriano", 47),
+                // new Department("Trento", "trento", 66),
+                new Department("Veronetta", "veronetta", 5, 8, 57, 13, 10, 21, 63, 15, 9, 64, 60),
+                new Department("Vicenza", "vicenza", 67, 58)
             });
 
             services.AddHostedService<SettingsValidationHostedService>();

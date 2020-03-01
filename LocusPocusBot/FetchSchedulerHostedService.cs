@@ -54,7 +54,7 @@ namespace LocusPocusBot
         {
             foreach (Department department in this.departments)
             {
-                this.logger.LogInformation($"Refreshing data for {department.Id}/{department.Name}");
+                this.logger.LogInformation($"Refreshing data for {department.Name} (id: {string.Join(", ", department.Ids)})");
 
                 try
                 {
@@ -62,7 +62,7 @@ namespace LocusPocusBot
                 }
                 catch (Exception ex)
                 {
-                    this.logger.LogError(ex, $"Exception while refreshing {department.Id}/{department.Name}");
+                    this.logger.LogError(ex, $"Exception while refreshing {department.Name} (id: {string.Join(", ", department.Ids)})");
                 }
             }
 
