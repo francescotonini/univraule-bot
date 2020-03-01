@@ -4,7 +4,6 @@ using NodaTime.Extensions;
 using NodaTime.Text;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Linq;
 
@@ -12,7 +11,7 @@ namespace LocusPocusBot.Rooms
 {
     public class RoomsService : IRoomsService
     {
-        private readonly string easyRoomUrl = "https://logistica.univr.it/PortaleStudentiUnivr//rooms_call.php";
+        private readonly string easyRoomUrl = "https://logistica.univr.it/PortaleStudentiUnivr/rooms_call.php";
         private readonly HttpClient client;
 
         public RoomsService(HttpClient client)
@@ -59,12 +58,7 @@ namespace LocusPocusBot.Rooms
                 // Parse the JSON object
                 JObject payload = JObject.Parse(body);
 
-                // Get the dictionary of rooms for the department.
-                // This API is so weird. You ask information for a department,
-                // and it returns all the departments anyway
-                JObject roomDic = (JObject)payload.SelectToken($"area_rooms.{id}");
-
-                List<Room> rooms = ParseRooms(roomDic, department);
+                List<Room> rooms = ParseRooms(payload, department, id);
                 ParseLectures(payload, rooms);
 
                 nestedRooms.Add(rooms);
@@ -73,8 +67,13 @@ namespace LocusPocusBot.Rooms
             return nestedRooms.SelectMany(x => x).ToList();
         }
 
-        private static List<Room> ParseRooms(JObject roomDic, Department department)
+        private static List<Room> ParseRooms(JObject payload, Department department, int depId)
         {
+            // Get the dictionary of rooms for the department.
+            // This API is so weird. You ask information for a department,
+            // and it returns all the departments anyway
+            JObject roomDic = (JObject)payload.SelectToken($"area_rooms.{depId}");
+
             // Create a list for rooms
             List<Room> rooms = new List<Room>();
 
@@ -97,147 +96,28 @@ namespace LocusPocusBot.Rooms
                         continue;
                     }
                 }
-
-
-                if (department.Slug == "povo")
+                else if (department.Slug == "borgoroma")
                 {
-                    // Keep only the name of the room, like "B107"
-                    // Strips parentheses, bla...
-                    Match match = Regex.Match(roomName, "[AB]{1}[0-9]{3}");
-
-                    if (match.Success)
+                    if (roomName.All(char.IsDigit))
                     {
-                        roomName = match.Value;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-                else if (department.Slug == "mesiano")
-                {
-                    if (roomName.StartsWith("Aula "))
-                    {
-                        roomName = roomName.Substring(5);
-
-                        if (roomName == "1R" || roomName == "2R")
+                        string buildingName = string.Empty;
+                        if (depId == 24)
                         {
-                            continue;
+                            buildingName = "Lente didattica";
                         }
-                    }
-                    else if (roomName.StartsWith("Biblioteca"))
-                    {
-                        roomName = "Biblioteca";
-                    }
-                    // Keep EALAB, skip everything else
-                    else if (roomName != "EALAB")
-                    {
-                        continue;
-                    }
-                }
-                else if (department.Slug == "psicologia")
-                {
-                    Match match = Regex.Match(roomName, "^Aula ([0-9]{1,2}|Magna)");
-
-                    if (match.Success)
-                    {
-                        // Keep only the name of the room, like "1", "11" or "Magna"
-                        // Strips floor, etc...
-                        roomName = match.Groups[1].Value;
-                    }
-                    else if (roomName.StartsWith("Laboratorio informatico "))
-                    {
-                        roomName = "Lab " + roomName.Substring(24);
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-                else if (department.Slug == "sociologia")
-                {
-                    string[] roomNameParts = roomName.Split(' ');
-
-                    if (roomNameParts[0] == "Aula")
-                    {
-                        if (roomNameParts[1] == "Kessler")
+                        else if (depId == 30)
                         {
-                            continue;
+                            buildingName = "Piastra odontoiatrica";
                         }
-                        else
+                        else if (depId == 27)
                         {
-                            roomName = roomNameParts[1];
-                        }
-                    }
-                    else if (roomNameParts[0] == "Laboratorio")
-                    {
-                        roomName = "Lab " + roomNameParts[1];
-                    }
-                    else if (roomNameParts[0] == "Sala")
-                    {
-                        if (roomNameParts[1] == "Studio" || roomNameParts[1] == "Gruppi")
-                        {
-                            roomName = roomName.Substring(5);
-                        }
-                        else if (roomNameParts[1] == "archeologica")
-                        {
-                            roomName = "Archeologica";
-                        }
-                        else
-                        {
-                            continue;
-                        }
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-                else if (department.Slug == "lettere")
-                {
-                    Match match = Regex.Match(roomName, "^Aula ([0-9]{1,3})");
-
-                    if (match.Success)
-                    {
-                        // Keep only the name of the room, like "001"
-                        // Strips everything else
-                        roomName = match.Groups[1].Value;
-                    }
-                    else if (roomName.StartsWith("Laboratorio m"))
-                    {
-                        roomName = "Lab " + roomName[25];
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-                else if (department.Slug == "economia")
-                {
-                    if (roomName.StartsWith("Aula informatica "))
-                    {
-                        roomName = "Inf " + roomName.Substring(17).Replace(" - ", " ").ToUpper();
-                    }
-                    else if (roomName.StartsWith("Aula "))
-                    {
-                        roomName = roomName.Substring(5);
-                    }
-                    else if (roomName.StartsWith("Sala "))
-                    {
-                        if (roomName == "Sala corso Nettuno" ||
-                            roomName == "Sala seminari" ||
-                            roomName == "Sala Conferenze" ||
-                            roomName.StartsWith("Sala studio") ||
-                            roomName.StartsWith("Sala DEM"))
-                        {
-                            continue;
+                            buildingName = "Ex area Gavazzi";
                         }
 
-                        roomName = char.ToUpper(roomName[5]) + roomName.Substring(6).Replace(" - ", " ");
-                    }
-                    else
-                    {
-                        continue;
+                        if (!string.IsNullOrEmpty(buildingName))
+                        {
+                            roomName = $"{buildingName} - {roomName}";
+                        }
                     }
                 }
 
