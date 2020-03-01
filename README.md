@@ -10,7 +10,7 @@ A previous version of this bot was developed in nodejs and has been available fo
 
 Configuration of the application is done through the `appsettings.json` file read from the current working directory at startup.
 
-Examples for [development](https://github.com/matteocontrini/locuspocusbot/blob/dotnet/LocusPocusBot/appsettings.example.development.json) and [production](https://github.com/matteocontrini/locuspocusbot/blob/dotnet/LocusPocusBot/appsettings.example.json) environments are available.
+Examples for [development](https://github.com/francescotonini/univraule-bot/blob/master/LocusPocusBot/appsettings.example.development.json) and [production](https://github.com/francescotonini/univraule-bot/blob/master/LocusPocusBot/appsettings.example.json) environments are available.
 
 ## Running for development
 
