@@ -21,16 +21,17 @@ namespace LocusPocusBot.Handlers
         {
             StringBuilder msg = new StringBuilder();
             
-            msg.AppendLine("Ciao! 🤓");
+            msg.AppendLine("Ciao! 👋👋");
             msg.AppendLine();
-            msg.AppendLine("Sono *LocusPocus* e ti posso aiutare a trovare le aule libere presso i poli dell'Università di Trento 🎓");
+            msg.AppendLine("Sono *UniVRAuleBot* e ti posso aiutare a trovare le aule libere presso le sedi dell'Università di Verona 🎓");
             msg.AppendLine();
             msg.AppendLine("Usa uno di questi comandi per ottenere la lista delle aule libere:");
             msg.AppendLine();
 
             foreach (Department dep in this.departments)
             {
-                msg.Append('/');
+                msg.Append($"*{dep.Name}*");
+                msg.Append(": /");
                 msg.AppendLine(dep.Slug);
             }
 

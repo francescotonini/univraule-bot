@@ -21,23 +21,24 @@ namespace LocusPocusBot.Handlers
         {
             StringBuilder msg = new StringBuilder();
             
-            msg.AppendLine("*LocusPocus* è il bot per controllare la disponibilità delle aule presso i poli dell'Università di Trento 🎓");
+            msg.AppendLine("*UniVRAuleBot* è il bot per controllare la disponibilità delle aule presso le sedi dell'Università di Verona 🎓");
             msg.AppendLine();
             msg.AppendLine("👉 *Usa uno di questi comandi per ottenere la lista delle aule libere*");
             msg.AppendLine();
 
             foreach (Department dep in this.departments)
             {
-                msg.Append('/');
+                msg.Append($"*{dep.Name}*");
+                msg.Append(": /");
                 msg.AppendLine(dep.Slug);
             }
 
             msg.AppendLine();
-            msg.AppendLine("🤫 Il bot è sviluppato da Matteo Contrini (@matteocontrini) con la collaborazione di Emilio Molinari");
+            msg.AppendLine("ℹ️ I dati visualizzati provengono da [logistica.univr.it](https://logistica.univr.it/PortaleStudentiUnivr/index.php?view=rooms&include=rooms&_lang=en&empty_box=0&col_cells=0)");
             msg.AppendLine();
-            msg.AppendLine("👏 Un grazie speciale a Alessandro Conti per il nome del bot e a [Dario Crisafulli](https://botfactory.it/#chisiamo) per il logo!");
+            msg.AppendLine("⚠️ I dati mostrati potrebbero non rispecchiare l'effettiva disponibilità dell'aula");
             msg.AppendLine();
-            msg.AppendLine("🤓 Il bot è [open source](https://github.com/matteocontrini/locuspocusbot)");
+            msg.AppendLine("💻 Il bot è [open source](https://github.com/francescotonini/univraule-bot)");
 
             await this.bot.Client.SendTextMessageAsync(
                 chatId: this.Chat.Id,
