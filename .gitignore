@@ -408,4 +408,5 @@ MigrationBackup/
 
 # End of https://www.gitignore.io/api/windows,visualstudio,macos
 
-appsettings.json
+appsettings.Development.json
+appsettings.development.json

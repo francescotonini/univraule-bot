@@ -68,7 +68,9 @@ namespace LocusPocusBot
         {
             // Load the application settings
             configApp.SetBasePath(Directory.GetCurrentDirectory());
-            configApp.AddJsonFile("appsettings.json");
+            configApp.AddEnvironmentVariables();
+
+            configApp.AddJsonFile("appsettings.Development.json", true);
         }
 
         private static void ConfigureLogging(WebHostBuilderContext hostContext, ILoggingBuilder logging)
