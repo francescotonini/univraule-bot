@@ -1,14 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using LocusPocusBot.Handlers;
-using LocusPocusBot.Rooms;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PlainConsoleLogger;
+using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace LocusPocusBot
 {
@@ -21,25 +20,36 @@ namespace LocusPocusBot
         private static CancellationTokenSource shutdownTokenSource =
             new CancellationTokenSource();
 
-        public static IHost Host { get; }
-
-        static Program()
+        public static IHostBuilder CreateHostBuilder(string[] args)
         {
-            Host = new HostBuilder()
-                    .ConfigureAppConfiguration(ConfigureApp)
-                    .ConfigureServices(ConfigureServices)
-                    .ConfigureLogging(ConfigureLogging)
-                    .UseConsoleLifetime(opts => opts.SuppressStatusMessages = true)
-                    .Build();
+            return Host.CreateDefaultBuilder(args)
+                 .ConfigureWebHostDefaults(builder =>
+                 {
+                     builder.UseStartup<Startup>()
+                        .ConfigureAppConfiguration(configure =>
+                        {
+                            configure.AddEnvironmentVariables();
+                        })
+                        .ConfigureAppConfiguration(ConfigureApp)
+                        .ConfigureLogging(ConfigureLogging);
+                 });
         }
 
         static async Task Main(string[] args)
         {
-            ILogger logger = Host.Services.GetRequiredService<ILogger<Program>>();
+            IHost host = CreateHostBuilder(args).Build();
+
+            ILogger logger = (ILogger)host.Services.GetService(typeof(ILogger<Program>));
 
             try
             {
-                await Host.RunAsync(shutdownTokenSource.Token);
+                using (IServiceScope scope = host.Services.CreateScope())
+                {
+                    var initializer = (IAppInitializer)scope.ServiceProvider.GetRequiredService(typeof(IAppInitializer));
+                    await initializer.InitializeAsync();
+                }
+
+                await host.RunAsync(shutdownTokenSource.Token);
             }
             catch (Exception ex)
             {
@@ -50,55 +60,23 @@ namespace LocusPocusBot
 
                 // Required to stop all the threads.
                 // With "return 1", the process could actually stay online forever
-
                 Environment.Exit(1);
             }
         }
 
-        private static void ConfigureApp(HostBuilderContext hostContext, IConfigurationBuilder configApp)
+        private static void ConfigureApp(WebHostBuilderContext hostContext, IConfigurationBuilder configApp)
         {
             // Load the application settings
             configApp.SetBasePath(Directory.GetCurrentDirectory());
             configApp.AddJsonFile("appsettings.json");
         }
 
-        private static void ConfigureLogging(HostBuilderContext hostContext, ILoggingBuilder logging)
+        private static void ConfigureLogging(WebHostBuilderContext hostContext, ILoggingBuilder logging)
         {
             logging.AddConfiguration(hostContext.Configuration.GetSection("Logging"));
+
+            logging.ClearProviders();
             logging.AddPlainConsole();
-        }
-
-        private static void ConfigureServices(HostBuilderContext hostContext, IServiceCollection services)
-        {
-            services.Configure<BotConfiguration>(hostContext.Configuration.GetSection("Bot"));
-
-            // This also registers the service as a transient service
-            services.AddHttpClient<IRoomsService, RoomsService>();
-
-            services.AddSingleton<IBotService, BotService>();
-            services.AddScoped<IUpdateProcessor, UpdateProcessor>();
-            services.AddHandlers();
-
-            services.AddSingleton(new Department[]
-            {
-                new Department("Ca' Vignal", "cavignal", 1, 2, 3),
-                // new Department("Bolzano - Claudiana", "claudiana", 68, 69),
-                new Department("Istituti biologici", "biologici", 22, 23),
-                new Department("Medicina - Borgo Roma", "borgoroma", 27, 24, 29, 30, 40, 26),
-                new Department("Medicina - Borgo Trento", "borgotrento", 31),
-                new Department("Borgo Venezia", "borgovenezia", 33, 43),
-                new Department("Cittadella", "cittadella", 17, 54),
-                // new Department("Legnago", "legnago", 70, 71),
-                // new Department("Rovereto", "rovereto", 61),
-                new Department("S. Floriano", "floriano", 47),
-                // new Department("Trento", "trento", 66),
-                new Department("Veronetta", "veronetta", 5, 8, 57, 13, 10, 21, 63, 15, 9, 64, 60),
-                new Department("Vicenza", "vicenza", 67, 58)
-            });
-
-            services.AddHostedService<SettingsValidationHostedService>();
-            services.AddHostedService<BotHostedService>();
-            services.AddHostedService<FetchSchedulerHostedService>();
         }
     }
 }
