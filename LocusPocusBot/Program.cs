@@ -20,24 +20,17 @@ namespace LocusPocusBot
         private static CancellationTokenSource shutdownTokenSource =
             new CancellationTokenSource();
 
-        public static IHostBuilder CreateHostBuilder(string[] args)
+        static async Task Main(string[] args)
         {
-            return Host.CreateDefaultBuilder(args)
+            IHost host = Host.CreateDefaultBuilder(args)
                  .ConfigureWebHostDefaults(builder =>
                  {
                      builder.UseStartup<Startup>()
-                        .ConfigureAppConfiguration(configure =>
-                        {
-                            configure.AddEnvironmentVariables();
-                        })
                         .ConfigureAppConfiguration(ConfigureApp)
-                        .ConfigureLogging(ConfigureLogging);
-                 });
-        }
-
-        static async Task Main(string[] args)
-        {
-            IHost host = CreateHostBuilder(args).Build();
+                        .ConfigureLogging(ConfigureLogging)
+                        .PreferHostingUrls(true);
+                 })
+                 .Build();
 
             ILogger logger = (ILogger)host.Services.GetService(typeof(ILogger<Program>));
 
