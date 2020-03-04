@@ -16,7 +16,7 @@ FROM build AS publish
 WORKDIR /app/LocusPocusBot
 RUN dotnet publish -c Release -o out
 
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1 AS runtime
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine AS runtime
 WORKDIR /app
 COPY --from=publish /app/LocusPocusBot/out ./
 
