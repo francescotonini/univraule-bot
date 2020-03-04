@@ -2,6 +2,7 @@
 using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace LocusPocusBot.Handlers
 {
@@ -44,7 +45,8 @@ namespace LocusPocusBot.Handlers
                 chatId: this.Chat.Id,
                 text: msg.ToString(),
                 parseMode: ParseMode.Markdown,
-                disableWebPagePreview: true
+                disableWebPagePreview: true,
+                replyMarkup: new ReplyKeyboardRemove()
             );
         }
     }

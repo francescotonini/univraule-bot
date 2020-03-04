@@ -173,7 +173,7 @@ namespace LocusPocusBot.Handlers
         {
             if (room.IsFreeNow)
             {
-                msg.Append("✳️ <strong>");
+                msg.Append("✅ <strong>");
                 msg.Append(room.Name);
                 msg.Append("</strong>: ");
 
