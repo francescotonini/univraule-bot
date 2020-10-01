@@ -4,7 +4,7 @@ This repository contains a Telegram bot that shows rooms availability at Univers
 
 ## Previous versions
 
-A previous version of this bot was developed in nodejs and has been available for about two year and a half. The code of that version is now available [in another branch](https://github.com/francescotonini/univraule-bot/tree/nodejs). This new version is based on [LocusPocusBot](https://github.com/matteocontrini/locuspocusbot) built by my good 'ol friend [matteocontrini](https://github.com/matteocontrini). This new version wouldn't be possible without him, so go on his repo and give him some love.
+A previous version of this bot was developed in nodejs and has been available for about two year and a half. The code of that version is now available [in another branch](https://github.com/francescotonini/univraule-bot/tree/nodejs). This new version is based on [LocusPocusBot](https://github.com/matteocontrini/locuspocusbot) built by my good 'ol friend [matteocontrini](https://github.com/matteocontrini) and [xates](https://github.com/xates). This new version wouldn't be possible without him, so go to his repo and give him some love.
 
 ## Configuration
 
